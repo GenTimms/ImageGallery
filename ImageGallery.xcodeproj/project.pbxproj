@@ -70,9 +70,9 @@
 			children = (
 				B46225B72080C683004FE0F1 /* Main.storyboard */,
 				B46225B32080C683004FE0F1 /* DocumentViewController.swift */,
+				B46225C92080CAA4004FE0F1 /* Model */,
 				B46225CC2080CAA4004FE0F1 /* Views */,
 				B46225D02080CAA4004FE0F1 /* Controllers */,
-				B46225C92080CAA4004FE0F1 /* Model */,
 				B46225BF2080C687004FE0F1 /* Info.plist */,
 				B46225C52080C7D2004FE0F1 /* Supporting Files */,
 			);

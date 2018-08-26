@@ -17,15 +17,19 @@ class DocumentViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        // Access the document
         document?.open(completionHandler: { (success) in
             if success {
-                // Display the content of the document, e.g.:
                 self.documentNameLabel.text = self.document?.fileURL.lastPathComponent
             } else {
-                // Make sure to handle the failed import appropriately, e.g., by presenting an error message to the user.
+               self.displayErrorAlert()
             }
         })
+    }
+    
+    private func displayErrorAlert() {
+        let alert = UIAlertController(title: "Error", message: "Unable To Open Document", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
     }
     
     @IBAction func dismissDocumentViewController() {

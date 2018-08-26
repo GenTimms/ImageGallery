@@ -12,10 +12,16 @@ private let reuseIdentifier = "Cell"
 
 class ImageGalleryCollectionViewController: UICollectionViewController, UICollectionViewDropDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDragDelegate {
 
-    // MARK: - Model
-    var imageGallery = ImageGallery()
-
-
+    @IBOutlet weak var instructionView: UIView!
+    //MARK: - Model
+    var imageGallery = ImageGallery() { didSet {
+        if imageGallery.images.isEmpty {
+            instructionView.isHidden = false
+        } else {
+            instructionView.isHidden = true
+        }
+        }}
+    
     //MARK: - UIDocument
     var document: ImageGalleryDocument?
     
@@ -31,7 +37,6 @@ class ImageGalleryCollectionViewController: UICollectionViewController, UICollec
         if document?.imageGallery != nil {
             document?.thumbnail = (collectionView?.visibleCells.first as? ImageCollectionViewCell)?.image
         }
-        
         presentingViewController?.dismiss(animated: true)  {
             self.document?.close()
         }
@@ -40,7 +45,6 @@ class ImageGalleryCollectionViewController: UICollectionViewController, UICollec
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
     }
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,10 +64,8 @@ class ImageGalleryCollectionViewController: UICollectionViewController, UICollec
     }
     
     //MARK: - UICollectionView Layout
-    
     @IBOutlet weak var imageGalleryCollectionViewFlowLayout: UICollectionViewFlowLayout!
     private var itemWidth: CGFloat = 200
-    
     
     @objc private func scaleImageWidth(recognizer: UIPinchGestureRecognizer) {
         switch recognizer.state {
@@ -73,9 +75,7 @@ class ImageGalleryCollectionViewController: UICollectionViewController, UICollec
     }
     
     //MARK: UICollectionViewDelegate
-    
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
         if let cell = collectionView.cellForItem(at: indexPath) as? ImageCollectionViewCell {
             let imageViewController = ImageViewController()
             imageViewController.image = cell.image
@@ -88,26 +88,20 @@ class ImageGalleryCollectionViewController: UICollectionViewController, UICollec
         }
     }
 
-
     // MARK: UICollectionViewFlowDelegate
-
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-    
             let height = imageGallery.images[indexPath.item].aspectRatio * itemWidth
             return CGSize(width: itemWidth, height: height)
     }
 
     // MARK: UICollectionViewDataSource
-
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
 
-
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return imageGallery.images.count
     }
-    
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Image Cell", for: indexPath)
@@ -145,7 +139,6 @@ class ImageGalleryCollectionViewController: UICollectionViewController, UICollec
     
     // MARK: - Dropping
     func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
-        
         return session.canLoadObjects(ofClass: URL.self) && session.canLoadObjects(ofClass: UIImage.self) || session.localDragSession != nil
     }
     
@@ -189,7 +182,6 @@ class ImageGalleryCollectionViewController: UICollectionViewController, UICollec
                     documentChanged()
                 }
             } else {
-                
                 item.dragItem.itemProvider.loadObject(ofClass: NSURL.self) { (provider, error) in
                     
                     if let url = provider as? URL {
@@ -231,5 +223,4 @@ class ImageGalleryCollectionViewController: UICollectionViewController, UICollec
         dragItem.localObject = imageGallery.images[indexPath.item]
         return [dragItem]
     }
-
 }

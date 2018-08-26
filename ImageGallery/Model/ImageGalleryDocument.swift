@@ -11,11 +11,9 @@ import UIKit
 class ImageGalleryDocument: UIDocument {
     
     var imageGallery: ImageGallery?
-    
-    var thumbnail: UIImage? //first image in gallery?
+    var thumbnail: UIImage?
     
     override func contents(forType typeName: String) throws -> Any {
-        // Encode your document with an instance of NSData or NSFileWrapper
         return imageGallery?.json ?? Data()
     }
     
